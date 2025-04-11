@@ -88,6 +88,8 @@ typedef unsigned int uint;
 #include "lv2/lv2-hmi.h"
 #include "lv2/mod-license.h"
 
+#define jack_max_cpu_load jack_cpu_load
+
 // do not enable external-ui support in embed targets
 #if !(defined(_MOD_DEVICE_DUO) || defined(_MOD_DEVICE_DUOX) || defined(_MOD_DEVICE_DWARF))
 #define WITH_EXTERNAL_UI_SUPPORT

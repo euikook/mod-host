@@ -265,7 +265,11 @@ int socket_send(int destination, const char *buffer, int size)
 
     while (size > 0)
     {
+#if 0
         ret = send(destination, buffer, size, 0);
+#else
+        ret = write(destination, buffer, size);
+#endif
         if (ret < 0)
         {
             perror("send error");
