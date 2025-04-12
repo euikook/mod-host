@@ -131,7 +131,13 @@ static pthread_t intclient_socket_thread;
 static void effects_add_cb(proto_t *proto)
 {
     int resp;
-    resp = effects_add(proto->list[1], atoi(proto->list[2]), 1);
+
+    char *name = NULL;
+    if (proto->list_count == 4) {
+        name = proto->list[3];
+    }
+
+    resp = effects_add(proto->list[1], atoi(proto->list[2]), name, 1);
     protocol_response_int(resp, proto);
 }
 
@@ -152,7 +158,12 @@ static void effects_activate_cb(proto_t *proto)
 static void effects_preload_cb(proto_t *proto)
 {
     int resp;
-    resp = effects_add(proto->list[1], atoi(proto->list[2]), 0);
+    char *name = NULL;
+
+    if (proto->list_count == 4) {
+        name = proto->list[3];
+    }
+    resp = effects_add(proto->list[1], atoi(proto->list[2]), name, 0);
     protocol_response_int(resp, proto);
 }
 

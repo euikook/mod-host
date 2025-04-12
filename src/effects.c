@@ -4695,7 +4695,7 @@ int effects_finish(int close_client)
     return SUCCESS;
 }
 
-int effects_add(const char *uri, int instance, int activate)
+int effects_add(const char *uri, int instance, char *name, int activate)
 {
     unsigned int ports_count;
     char effect_name[32], port_name[MAX_CHAR_BUF_SIZE+1];
@@ -4711,6 +4711,7 @@ int effects_add(const char *uri, int instance, int activate)
 
     effect_name[31] = '\0';
     port_name[MAX_CHAR_BUF_SIZE] = '\0';
+
 
     /* Jack */
     jack_client_t *jack_client;
@@ -4742,8 +4743,15 @@ int effects_add(const char *uri, int instance, int activate)
     plugin_uri = NULL;
     lilv_instance = NULL;
 
+
     /* Create a client to Jack */
-    snprintf(effect_name, 31, "effect_%i", instance);
+
+    if (name) {
+        snprintf(effect_name, 31, "%s", name);
+    } else {
+        snprintf(effect_name, 31, "effect_%i", instance);
+    }
+
     jack_client = jack_client_open(effect_name, JackNoStartServer, &jack_status);
 
     if (!jack_client)
