@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+TOPDIR=${1}
+OUTPUT=${2}
+
+README=${TOPDIR}/README.md
+
+A=`grep -n 'The commands supported' ${README} | cut -d':' -f1`
+B=`grep -n 'bye!' ${README} | cut -d':' -f1`
+sed -n -e "${A},${B} p" -e "$B q" ${README} > help_msg
+${TOPDIR}/utils/txt2cvar.py help_msg > ${OUTPUT}
+rm help_msg
+echo "const char version[] = {\""` git describe --tags 2>/dev/null || echo 0.0.0` \""};" >> ${OUTPUT}

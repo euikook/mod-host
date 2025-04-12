@@ -8,11 +8,23 @@ find_package(PkgConfig REQUIRED)
 set(SRC_DIR ./src)
 
 file(GLOB ALL_SRCS ${SRC_DIR}/*.c
+        ${CMAKE_CURRENT_BINARY_DIR}/info.h
         ${SRC_DIR}/dsp/compressor_core.c
         ${SRC_DIR}/dsp/compressor_core.c
         ${SRC_DIR}/monitor/monitor-client.c
         ${SRC_DIR}/sha1/sha1.c
         ${SRC_DIR}/rtmempool/rtmempool.c)
+
+set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/info.h PROPERTIES GENERATED 1)
+
+add_custom_target(infogen
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/info.h)
+
+add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/info.h
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/utils/infogen ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/info.h
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/README.md
+)
 
 pkg_check_modules(LILV REQUIRED IMPORTED_TARGET GLOBAL lilv-0) 
 
@@ -42,10 +54,14 @@ add_definitions(-Wno-float-equal)
 
 add_library(ALL_OBJS OBJECT ${ALL_SRCS})
 
+add_dependencies(ALL_OBJS infogen)
+
+
 add_compile_definitions(HAVE_LV2_STATE_FREE_PATH)
 
-include_directories(ALL_OBJS PUBLIC ${LILV_INCLUDE_DIRS})
+include_directories(ALL_OBJS PUBLIC ${LILV_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(mod-host ${ALL_SRCS})
 
 target_link_libraries(mod-host jack readline ${LILV_LIBRARIES} m pthread rt  fftw3_threads fftw3f_threads fftw3 fftw3 fftw3f)
+
