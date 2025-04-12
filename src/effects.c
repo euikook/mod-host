@@ -2876,9 +2876,9 @@ static int ProcessGlobalClient(jack_nframes_t nframes, void *arg)
             monitorbuf = (float*)jack_port_get_buffer(g_audio_monitors[i].port, nframes);
             oldvalue = value = g_audio_monitors[i].value;
 
-            for (jack_nframes_t i = 0 ; i < nframes; i++)
+            for (jack_nframes_t j = 0 ; j < nframes; j++)
             {
-                absvalue = fabsf(monitorbuf[i]);
+                absvalue = fabsf(monitorbuf[j]);
 
                 if (absvalue > value)
                     value = absvalue;
