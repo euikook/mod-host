@@ -74,7 +74,9 @@ void worker_finish(worker_t *worker)
     worker->exit = true;
     if (worker->requests) {
         sem_post(&worker->sem);
-        zix_thread_join(worker->thread, NULL);
+        if (worker->thread != 0) {
+            zix_thread_join(worker->thread, NULL);
+        }
         jack_ringbuffer_free(worker->requests);
         jack_ringbuffer_free(worker->responses);
         free(worker->response);

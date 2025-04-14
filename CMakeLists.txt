@@ -19,7 +19,6 @@ file(GLOB ALL_SRCS ${SRC_DIR}/*.c
 set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/info.h PROPERTIES GENERATED 1)
 
 
-
 pkg_check_modules(LILV REQUIRED IMPORTED_TARGET GLOBAL lilv-0)
 pkg_check_modules(JACK REQUIRED IMPORTED_TARGET GLOBAL jack)
 add_compile_definitions(HAVE_LV2_STATE_FREE_PATH)
@@ -75,3 +74,8 @@ install(
         TARGETS mod-host-lib mod-monitor fake-input
         LIBRARY DESTINATION ${JACK_LIBRARY_DIRS}/jack
 )
+
+# Debian Package
+SET(CPACK_GENERATOR "DEB")
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "euikook") #required
+INCLUDE(CPack)
