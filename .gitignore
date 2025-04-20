@@ -20,3 +20,4 @@ PKGBUILD
 build
 cmake-*
 debs
+.vscode
