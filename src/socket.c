@@ -112,7 +112,9 @@ static void (*g_receive_cb)(msg_t *msg);
 ************************************************************************************************************************
 */
 
+#ifdef HAVE_SYSTEMD
 #include <systemd/sd-daemon.h>
+#endif /* HAVE_SYSTEMD */
 
 int socket_start(int socket_port, int feedback_port, int buffer_size)
 {
@@ -136,7 +138,7 @@ int socket_start(int socket_port, int feedback_port, int buffer_size)
 
     g_clientfd = g_fbclientfd = INVALID_SOCKET;
 
-#ifndef _WIN32
+#ifdef HAVE_SYSTEMD
     int n = sd_listen_fds(0);
     if (n > 1) {
         fprintf(stderr, "No or too many file descriptors received.\n");
@@ -145,7 +147,7 @@ int socket_start(int socket_port, int feedback_port, int buffer_size)
         g_serverfd = SD_LISTEN_FDS_START + 0;
         return 0;
     }
-#endif
+#endif /* HAVE_SYSTEMD */
 
     g_serverfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
