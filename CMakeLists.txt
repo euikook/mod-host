@@ -41,7 +41,7 @@ add_custom_command(
 
 # Single Executable file.
 add_executable(mod-host ${ALL_SRCS})
-target_link_libraries(mod-host jack readline ${LILV_LIBRARIES} m pthread rt  fftw3_threads fftw3f_threads fftw3 fftw3 fftw3f)
+target_link_libraries(mod-host jack readline systemd ${LILV_LIBRARIES} m pthread rt  fftw3_threads fftw3f_threads fftw3 fftw3 fftw3f)
 
 
 # Lmod-host.so
@@ -88,8 +88,8 @@ set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CPACK_PACKAGE_NAME})
 SET(CPACK_OUTPUT_FILE_PREFIX "${CMAKE_SOURCE_DIR}/debs")
 set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
-set(CPACK_PACKAGE_VERSION_MINOR 1)
-set(CPACK_PACKAGE_VERSION_PATCH 1)
+set(CPACK_PACKAGE_VERSION_MINOR 10)
+set(CPACK_PACKAGE_VERSION_PATCH 11)
 set(CPACK_PACKAGE_CONTACT "euikook@gmail.com")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "euikook")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")

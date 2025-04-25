@@ -112,8 +112,12 @@ static void (*g_receive_cb)(msg_t *msg);
 ************************************************************************************************************************
 */
 
+#include <systemd/sd-daemon.h>
+
 int socket_start(int socket_port, int feedback_port, int buffer_size)
 {
+
+
 #ifdef _WIN32
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
@@ -131,6 +135,18 @@ int socket_start(int socket_port, int feedback_port, int buffer_size)
 #endif
 
     g_clientfd = g_fbclientfd = INVALID_SOCKET;
+
+#ifndef _WIN32
+    int n = sd_listen_fds(0);
+    if (n > 1) {
+        fprintf(stderr, "No or too many file descriptors received.\n");
+        exit(1);
+    } else if (n == 1) {
+        g_serverfd = SD_LISTEN_FDS_START + 0;
+        return 0;
+    }
+#endif
+
     g_serverfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
     if (g_serverfd == INVALID_SOCKET)
